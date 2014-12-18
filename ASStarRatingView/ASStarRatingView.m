@@ -95,7 +95,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    NSLog(@"%f, %f, %f, %d", self.frame.size.width, _leftMargin, _midMargin, _starViews.count);
+    // NSLog(@"%f, %f, %f, %d", self.frame.size.width, _leftMargin, _midMargin, _starViews.count);
     float desiredImageWidth = (self.frame.size.width - (_leftMargin*2) - (_midMargin*_starViews.count)) / _starViews.count;
     float imageWidth = MAX(_minStarSize.width, desiredImageWidth);
     float imageHeight = MAX(_minStarSize.height, self.frame.size.height);
@@ -134,6 +134,10 @@
 - (void)setRating:(float)rating {
     _rating = rating;
     [self refreshStars];
+
+    if([self.delegate respondsToSelector:@selector(ratingDidUpdate:)]){
+        [self.delegate ratingDidUpdate:_rating];
+    }
 }
 
 #pragma mark - Touch Detection
@@ -152,6 +156,10 @@
     _rating = MAX(_minAllowedRating, _rating);
     _rating = MIN(_maxAllowedRating, _rating);
     [self refreshStars];
+
+    if([self.delegate respondsToSelector:@selector(ratingDidUpdate:)]){
+        [self.delegate ratingDidUpdate:_rating];
+    }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
